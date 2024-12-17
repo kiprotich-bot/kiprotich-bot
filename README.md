@@ -5,8 +5,6 @@ import pandas as pd
 # Replace 'salary_data.csv' with the path to your data file
 salary_data = pd.read_csv('salary_data.csv')
 print(salary_data.head())
-```
-Next, create a Python function that accepts an employee's name and returns their details.
 
 ```python
 def get_employee_details(name):
