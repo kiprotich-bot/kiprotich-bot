@@ -1,0 +1,14 @@
+
+library(ggplot2)
+library(dplyr)
+netflix_data <- read.csv("Netflix_shows_movies.csv")
+ggplot(netflix_data, aes(x = release_year, fill = type)) +
+  geom_bar(position = "stack") +
+  theme_minimal() +
+  labs(title = "Netflix Content Distribution by Year and Type",
+       x = "Release Year",
+       y = "Count",
+       fill = "Content Type") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_brewer(palette = "Set2")
+ggsave("netflix_content_distribution_r.png", width = 12, height = 6)
