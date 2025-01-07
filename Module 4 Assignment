@@ -1,0 +1,23 @@
+Load required libraries
+library(ggplot2)
+library(dplyr)
+netflix_data <- read.csv("data//Users/HPELITEBOOK/Desktop/Netflix_data.csv")
+ratings_plot <- ggplot(netflix_data, aes(x = rating)) +
+  geom_bar(fill = "skyblue", color = "darkblue") +
+  theme_minimal() +
+  labs(
+    title = "Distribution of Netflix Content Ratings",
+    x = "Rating Category",
+    y = "Number of Titles"
+  ) +
+  theme(
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.title = element_text(size = 12)
+  )
+ggsave(
+  "visualizations/ratings_distribution_r.png",
+  ratings_plot,
+  width = 10,
+  height = 6,
+  dpi = 300
