@@ -29,30 +29,25 @@ lr_model = LogisticRegression(random_state=42)
 lr_model.fit(X_train, y_train)
 
 y_pred = lr_model.predict(X_test)
-
 print("\nClassification Report:")
 print(classification_report(y_test, y_pred))
-
 plt.figure(figsize=(10, 6))
 scatter = plt.scatter(X_pca[:, 0], X_pca[:, 1], c=y, cmap='viridis')
 plt.xlabel('First Principal Component')
 plt.ylabel('Second Principal Component')
 plt.title('PCA of Breast Cancer Dataset')
 plt.colorbar(scatter)
-
 pca_components_df = pd.DataFrame(
     abs(pca.components_),
     columns=cancer.feature_names,
     index=['PC1', 'PC2']
 )
-
 print("\nTop 5 most important features for each principal component:")
 for pc in ['PC1', 'PC2']:
     print(f"\n{pc}:")
     top_features = pca_components_df.loc[pc].sort_values(ascending=False)[:5]
     for feat, val in top_features.items():
         print(f"{feat}: {val:.4f}")
-
 plt.figure(figsize=(12, 6))
 plt.subplot(1, 2, 1)
 plt.plot(range(1, 3), cumulative_variance_ratio[:2], 'bo-')
