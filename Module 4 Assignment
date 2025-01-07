@@ -1,23 +1,83 @@
-Load required libraries
-library(ggplot2)
-library(dplyr)
-netflix_data <- read.csv("data//Users/HPELITEBOOK/Desktop/Netflix_data.csv")
-ratings_plot <- ggplot(netflix_data, aes(x = rating)) +
-  geom_bar(fill = "skyblue", color = "darkblue") +
-  theme_minimal() +
-  labs(
-    title = "Distribution of Netflix Content Ratings",
-    x = "Rating Category",
-    y = "Number of Titles"
-  ) +
-  theme(
-    plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    axis.title = element_text(size = 12)
-  )
-ggsave(
-  "visualizations/ratings_distribution_r.png",
-  ratings_plot,
-  width = 10,
-  height = 6,
-  dpi = 300
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import zipfile
+def load_netflix_data(zip_path):
+    """
+    Unzip and load Netflix dataset
+    """
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall('.')
+    
+    df = pd.read_csv('netflix_titles.csv')
+    df.to_csv('Netflix_shows_movies.csv', index=False)
+    return df
+def clean_netflix_data(df):
+    """
+    Clean the Netflix dataset by handling missing values
+    """
+    missing_values = df.isnull().sum()
+    print("\nMissing values in each column:")
+    print(missing_values)
+    df['director'].fillna('Unknown Director', inplace=True)
+    df['cast'].fillna('Not Available', inplace=True)
+    df['country'].fillna('Unknown', inplace=True)
+    df['rating'].fillna('Not Rated', inplace=True)
+    df['duration'].fillna(df['duration'].median(), inplace=True)
+    
+    return df
+def explore_netflix_data(df):
+    """
+    Perform exploratory data analysis
+    """
+    print("\nDataset Overview:")
+    print(df.info())
+    
+    print("\nStatistical Summary:")
+    print(df.describe())
+    
+    print("\nContent Type Distribution:")
+    print(df['type'].value_counts())
+    
+    return df
+def create_visualizations(df):
+    """
+    Create various visualizations for Netflix data
+    """
+    plt.style.use('seaborn')
+    plt.figure(figsize=(15, 8))
+    # Split listed genres and count frequencies
+    genres = df['listed_in'].str.split(',', expand=True).stack()
+    genre_counts = genres.value_counts().head(10)
+    
+    sns.barplot(x=genre_counts.values, y=genre_counts.index)
+    plt.title('Top 10 Netflix Genres')
+    plt.xlabel('Count')
+    plt.ylabel('Genre')
+    plt.tight_layout()
+    plt.savefig('netflix_genres.png')
+    plt.figure(figsize=(12, 6))
+    rating_counts = df['rating'].value_counts()
+    sns.barplot(x=rating_counts.index, y=rating_counts.values)
+    plt.title('Netflix Content Ratings Distribution')
+    plt.xlabel('Rating')
+    plt.ylabel('Count')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.savefig('netflix_ratings.png')
+  
+    plt.figure(figsize=(15, 6))
+    sns.histplot(data=df, x='release_year', bins=30)
+    plt.title('Distribution of Netflix Content by Release Year')
+    plt.xlabel('Release Year')
+    plt.ylabel('Count')
+    plt.tight_layout()
+    plt.savefig('netflix_years.png')
+
+def main():
+    # Assuming the zip file is named 'netflix_data.zip'
+    df = load_netflix_data('netflix_data.zip')
+    df = clean_netflix_data(df)
+    df = explore_netflix_data(df)
+    create_visualizations(df)
