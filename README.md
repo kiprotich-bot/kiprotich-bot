@@ -1,20 +1,14 @@
-
 import pandas as pd
-
 salary_data = pd.read_csv('salary_data.csv')
 print(salary_data.head())
-
 def get_employee_details(name):
     employee = salary_data[salary_data['Name'] == name]
     if not employee.empty:
         return employee.to_dict('records')[0]
     else:
         return "Employee not found."
-
 salary_dict = salary_data.set_index('Name').to_dict('index')
-print(salary_dict)
-```
-
+print(salary_dict)`
 def export_employee_details(name):
     employee = get_employee_details(name)
     if is instance(employee, dict):
