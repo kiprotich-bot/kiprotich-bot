@@ -142,6 +142,5 @@ def main():
     visualize_ratings(df)
     df.to_csv('data/Netflix_shows_movies_cleaned.csv', index=False)
 
-if __name__ == "__main__":
-    main()
+
 
