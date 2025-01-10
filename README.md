@@ -15,10 +15,8 @@ def export_employee_details(name):
         df = pd.DataFrame([employee])
         csv_filename = f"{name}_details.csv"
         df.to_csv(csv_filename, index=False)
-        
         with zipfile.ZipFile('Employee_Profile.zip', 'w') as Zipf:
             Zipf.write(csv_filename)
-        
         os.remove(csv_filename)
         return "Employee details exported and zipped successfully."
     else:
@@ -38,14 +36,13 @@ R Script to unzip and display data\n",
     "employee_data <- read.csv(\"Employee Profile/John_Doe_profile.csv\")\n",
     "print(employee_data)\n",
     "```"
-
+    
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from zipfile import ZipFile
 import os
-
 def prepare_data(/Users/HPELITEBOOK/Desktop/Netflix_data.csv):
     """
     Unzip the dataset and load it into a DataFrame
