@@ -20,14 +20,10 @@ cumulative_variance_ratio = np.cumsum(explained_variance_ratio)
 print("\nVariance explained by each component:")
 for i, var in enumerate(explained_variance_ratio):
     print(f"PC{i+1}: {var:.4f} ({var*100:.2f}%)")
-
 print(f"\nCumulative variance explained by 2 components: {cumulative_variance_ratio[1]*100:.2f}%")
-
 X_train, X_test, y_train, y_test = train_test_split(X_pca, y, test_size=0.2, random_state=42)
-
 lr_model = LogisticRegression(random_state=42)
 lr_model.fit(X_train, y_train)
-
 y_pred = lr_model.predict(X_test)
 print("\nClassification Report:")
 print(classification_report(y_test, y_pred))
