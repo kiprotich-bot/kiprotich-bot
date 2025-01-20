@@ -1,0 +1,28 @@
+
+class User:
+    def __init__(self):
+        self.client = MongoClient('mongodb://localhost:27017/')
+        self.db = self.client['survey_db']
+        self.collection = self.db['user_data']
+
+    def export_to_csv(self, filename='user_data.csv'):
+        data = self.collection.find()
+        with open(filename, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Age', 'Gender', 'Total Income', 'Utilities', 'Entertainment', 'School Fees', 'Shopping', 'Healthcare'])
+            for user in data:
+                writer.writerow([user['age'], user['gender'], user['total_income'], user['expenses']['utilities'], user['expenses']['entertainment'], user['expenses']['school_fees'], user['expenses']['shopping'], user['expenses']['healthcare']])
+user = User()
+user.export_to_csv()
+import pandas as pd
+df = pd.read_csv('user_data.csv')
+import matplotlib.pyplot as plt
+import seaborn as sns
+plt.figure(figsize=(10, 6))
+sns.barplot(x='age', y='total_income', data=df)
+plt.title('Ages with the Highest Income')
+plt.savefig('ages_highest_income.png')
+plt.figure(figsize=(10, 6))
+sns.boxplot(x='gender', y='total_income', data=df)
+plt.title('Gender Distribution Across Spending Categories')
+plt.savefig('gender_spending_distribution.png')
